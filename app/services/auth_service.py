@@ -37,10 +37,11 @@ async def authenticate_user(email: str, password: str):
         return None
 
 # Refresh token
-async def refresh_token(current_token: str):
+async def refresh_token(current_token: str, user: str):
     if await verify_token(current_token):
-        return await create_access_token(data={"user": "user"})
-    return None
+        new_token = await create_access_token(data={"user": user})
+    AuthEngine.refreshedToken.add(current_token)
+    return new_token
 
 #Revoke token
 async def revoke_token(token: str):

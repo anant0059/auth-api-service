@@ -20,21 +20,29 @@ async def create_access_token(data: dict, expires_delta: Optional[timedelta] = N
 async def verify_token(token: str) -> Optional[dict]:
     try:
         if await is_token_revoked(token):
-            raise HTTPException(status_code=401, detail="Token has been revoked")
+            raise HTTPException(status_code=401, detail="Token already revoked")
+        
+        if await is_token_refreshed(token):
+            raise HTTPException(status_code=401, detail="Token already refreshed")
         
         decoded_token = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
 
         exp_timestamp = decoded_token.get('exp')
-
+        
         if exp_timestamp < datetime.now().timestamp():
             raise HTTPException(status_code=401, detail="Token has expired")
         
         return decoded_token
+    
     except JWTError:
-        return None
+        raise HTTPException(status_code=401, detail="Invalid token") from e
+
 
 async def is_token_revoked(token: str):
     return token in AuthEngine.revokedToken
+
+async def is_token_refreshed(token: str):
+    return token in AuthEngine.refreshedToken
 
 async def get_token_from_header(request: Request) -> Optional[str]:
     auth_header = request.headers.get("Authorization")
