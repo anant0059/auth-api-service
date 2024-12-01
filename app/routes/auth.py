@@ -30,7 +30,7 @@ async def protected_endpoint(token: str = Depends(get_token_from_header)):
     return {"message": "Access granted", "user": user_data}
 
 # 4. Revocation of token
-@router.post("/revoke")
+@router.post("/revoke-token")
 async def revoke(token: str = Depends(get_token_from_header)):
     result = await revoke_token(token)
     if not result:
@@ -38,7 +38,7 @@ async def revoke(token: str = Depends(get_token_from_header)):
     return {"message": "Token revoked successfully"}
 
 # 5. Mechanism to refresh a token
-@router.post("/refresh")
+@router.post("/refresh-token")
 async def refresh_access_token(token: str = Depends(oauth2_scheme)):
     user_data = await verify_token(token)
     new_token = await refresh_token(token)
