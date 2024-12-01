@@ -34,7 +34,7 @@ async def verify_token(token: str) -> Optional[dict]:
         
         return decoded_token
     
-    except JWTError:
+    except JWTError as e:
         raise HTTPException(status_code=401, detail="Invalid token") from e
 
 

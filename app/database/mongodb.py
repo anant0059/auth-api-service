@@ -5,7 +5,7 @@ import motor.motor_asyncio
 from app.utils.utilities import AuthEngine
 from app.config.settings import MONGO_URI, DB_NAME
 
-
+# Mongo connection establish
 async def mongo_connection_obj():
     try:
         print(f"Connecting to MongoDB at {MONGO_URI}")
@@ -20,7 +20,7 @@ async def mongo_connection_obj():
         print(f"Error connecting to MongoDB: {e}")
         raise
 
-
+# Insert data into db
 async def insert_one_into_db(tableName,value):
     try:
         in_time = time.time()
@@ -30,7 +30,7 @@ async def insert_one_into_db(tableName,value):
     except Exception as e:
         print(f"Failed to insert data into the database: {e}")
 
-
+# Get data from db
 async def get_data_from_db(tableName, query):
     try:
         in_time = time.time()

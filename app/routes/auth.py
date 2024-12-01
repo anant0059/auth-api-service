@@ -38,6 +38,7 @@ async def revoke(token: str = Depends(get_token_from_header)):
         raise HTTPException(status_code=400, detail="Token revocation failed")
     return {"message": "Token revoked successfully"}
 
+# 5. Refresh of token
 @router.post("/refresh-token")
 async def refresh_access_token(token: str = Depends(oauth2_scheme)):
     user_data = await verify_token(token)

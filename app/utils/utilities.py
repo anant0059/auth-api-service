@@ -1,3 +1,4 @@
+# Singleton function for storing data
 class AuthEngine(object):
   def __new__(cls):
     if not hasattr(cls, 'instance'):
